@@ -37,7 +37,14 @@ jobs:
       run: |
         python -c "from weather import mcp; print('Server check passed')"
         
-    - name: Check code formatting
+    - name: Format code with black
       run: |
         uv pip install black
-        black --check . 
+        black .
+        
+    - name: Commit formatted code
+      run: |
+        git config --global user.name 'GitHub Action'
+        git config --global user.email 'action@github.com'
+        git add .
+        git diff --quiet && git diff --staged --quiet || (git commit -m "Format code with black" && git push) 
